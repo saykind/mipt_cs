@@ -1,30 +1,30 @@
+	.data
 call_1: 
 	.string "My first sentance!\n"
 call_2: 
 	.string "My second sentance!\n"
+
 	.text
 	.globl main
 	.globl my_printf
 
 my_printf:
 //	Prolog
-	push %ebp
+	pushl %ebp
 	movl %esp, %ebp
 	
 	pushl %eax
 	movl  8(%ebp), %eax
 	pushl %eax
-
 	call printf
-		
+	addl $4, %esp	
+	
 	movl 12(%ebp), %eax
 	pushl %eax
-
 	call printf
-
-	addl $8, %esp
+	addl $4, %esp
+	
 	popl %eax
-//	subl $16, %esp
 	
 //	Epilog
 	movl %ebp, %esp
