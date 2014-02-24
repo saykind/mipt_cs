@@ -12,7 +12,6 @@ str_out:
 	.space	str_in_length
 
 
-
 		.text
 	.globl	main
 
@@ -37,7 +36,6 @@ label_1:
 	lodsb
 
 //	%al++.
-
 	incb	%al
 
 //	Write data from %al to str_out[i].
@@ -47,7 +45,7 @@ label_1:
 	loop	label_1
 
 //	Copy last 0x0 from %esi to %edi.
-	movsb
+	movsb 
 
 //	Print result.
 	pushl	$str_out
