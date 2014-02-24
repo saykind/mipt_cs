@@ -15,7 +15,7 @@ main:
 
 	call	printf
 
-	addl	$4, %esp
+	addl	$8, %esp
 
 	movl	%ebp, %esp
 	popl	%ebp
