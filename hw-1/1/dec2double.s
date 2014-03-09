@@ -3,11 +3,9 @@
 int:
 	.space	4
 str_hello:
-	.string "\nEnter number from -1073741823 to 1073741823: "
+	.string "\nEnter number from -1073741823 to 1073741823:\n"
 fmt_int:
 	.string	"%d"
-fmt_sgn:
-	.string "%d|"
 fmt_endl:
 	.string "\n\n"
 str_pos:
@@ -15,7 +13,7 @@ str_pos:
 str_neg:
 	.string "-"
 str_32:
-	.string "Signed integer value (32 bit) holds it like: "
+	.string "Signed integer value on 32-bit system will contain it like:\n"
 	
 	.text
 	.globl	main
@@ -47,29 +45,27 @@ main:
 	
 	movl	%eax,	int
 
+	pushl	$str_neg	##printf("(-)");
+	call printf		##
+	addl	$4,	%esp	##
+	
+	jmp	skip_print
 #	} else
 positiv:
+	pushl	$str_pos	##printf("(+)");
+	call printf		##
+	addl	$4,	%esp	##
 
-#	stack pre-fill	start
-	movl	$31,	%ebx
-fill:
-	cmpl	$0,	%ebx
-	jng	pre
-
-	pushl	$0
-	decl	%ebx
-	
-	jmp	fill
-#	stack pre-fill end
-pre:
+skip_print:
 	movl	int,	%eax	
+
 	movl	$0,	%edx	#edx = 0;
 	movl	$0,	%ebx	#ebx is counter
 	movl	$2,	%ecx	#ecx = 2;
 	
 start:
 	cmpl	$0,	%eax	#(eax==0)?
-	jng	poststart
+	jng	middle
 #	if (eax > 0) {
 	movl	$0,	%edx	#NB! eax = (edx:eax)/ecx;
 	divl	%ecx		#edx = eax mod ecx;	eax = (edx:eax)/ecx;
@@ -78,26 +74,11 @@ start:
 	incl	%ebx		#ebx++;
 	jmp	start	
 #	}
-poststart:
-	cmpl	$31,	%ebx
-	jnl	premiddle
-	
-	pushl	$0
-	incl	%ebx
-	
-	jmp	poststart
-
-premiddle:
-	pushl	$fmt_sgn
-	call printf
-	addl	$8,	%esp
-	decl	%ebx
-
 middle:
 	cmpl	$0,	%ebx	#ebx is counter
 	jng	end	
-#	if (ebx > 0) {
-	pushl	$fmt_int	#printf("%d", *(esp+ebx));	
+#	if (eax > 0) {
+	pushl	$fmt_int	#printf("%d", (esp)+ebx));	
 	call printf
 	addl	$8,	%esp
 

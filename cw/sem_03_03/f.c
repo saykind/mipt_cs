@@ -1,0 +1,12 @@
+"movw	$1,	%dx	\n\t"
+"andl	$255,	%eax	\n\t"	// Is not essential
+"begin:			\n\t"
+"cmpw	$0,	%ax	\n\t"
+"je	end		\n\t"
+"pushw	%ax		\n\t"
+"mulw	%dx	   	\n\t"
+"movw	%ax,	%dx	\n\t"
+"popw	%ax		\n\t"
+"decw	%ax		\n\t"
+"jmp	begin		\n\t"
+"end:			\n\t"
