@@ -1,4 +1,6 @@
 // Solution of problems #1.1 and #1.2
+// 	$ gcc -m32 1.s
+// 	$ ./a.out
 	.data
 int:
 	.space	4
