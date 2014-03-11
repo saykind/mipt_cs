@@ -1,5 +1,1 @@
-"\n\t"
-"\n\t"
-"\n\t"
-"\n\t"
-"\n\t"
+"lea	rdx,	[rax+8*rbx]\n\t"

@@ -1,6 +1,6 @@
 "mov	bx,	0	\n\t"
 "mov	dx,	1	\n\t"
-"and	eax,	255	\n\t"	
+/*"and	eax,	255	\n\t"*/	
 ".begin:		\n\t"
 "cmp	bx,	ax	\n\t"
 "je	.end		\n\t"

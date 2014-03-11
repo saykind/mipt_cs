@@ -1,6 +1,6 @@
 	.data
 	#Section of data
-int:	.space	4
+int:	.space	8
 fb2:	.space	4
 sfmt_int:	.string "%d"
 pfmt_int:	.string "%d\n"
@@ -10,33 +10,31 @@ pfmt_hex:	.string "%xd\t(hex)\n"
 	.global	main
 
 main:
-prolog:	pushl	%ebp
-	movl	%esp,	%ebp
+prolog:	pushq	%rbp
+	movq	%rsp,	%rbp
 	
-	pushl	$int
-	pushl	$sfmt_int
+	movq	$int,	%rsi
+	movl	$sfmt_int,	%edi
 	call scanf
-	addl	$8,	%esp
-	movl	$int,	%eax	
+	addq	$16,	%rsp
+	movq	int,	%rax	
 
-	movl	$1,	%ecx
-loop:	
-	cmpl	$0,	%ecx
-	jng	end
-	decl	%ecx
+#	movl	$1,	%ecx
+#loop:	
+#	cmpl	$0,	%ecx
+#	jng	end
+#	decl	%ecx
 	
-	addl	%ecx(%eax),	%ebx
+#	addl	%ecx(%eax),	%ebx
 
-	jmp loop
+#	jmp loop
 
-
-
-end:
-	pushl	%ebx
-	pushl	$pfmt_int
+#end:
+	movq	%rax,	%rsi
+	movl	$pfmt_int,	%edi
 	call printf
-	addl	$8,	%esp
+	addq	$16,	%rsp
 	
-epilog:	movl	%ebp,	%esp
-	popl	%ebp
+epilog:	movq	%rbp,	%rsp
+	popq	%rbp
 	ret
