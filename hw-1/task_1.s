@@ -124,4 +124,5 @@ not_zero:
 	
 	movl	%ebp,	%esp
 	popl	%ebp
-	ret
+	movl	$0,	%eax
+	ret 
