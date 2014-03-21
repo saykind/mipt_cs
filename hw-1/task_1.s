@@ -1,9 +1,11 @@
 // Solution of problems #1.1(1) and #1.2(2)
-// 	$ gcc -m32 1.s
+// 	$ gcc -m32 task_1.s
 // 	$ ./a.out
 	.data
 int:
 	.space	4
+int_2:
+	.space 4
 str_hello:
 	.string "\nEnter number from -1073741823 to 1073741823: "
 fmt_int:
@@ -12,10 +14,6 @@ fmt_sgn:
 	.string "%d|"
 fmt_endl:
 	.string "\n\n"
-str_pos:
-	.string "+"
-str_neg:
-	.string "-"
 str_32:
 	.string "Signed integer value (32 bit) holds it like: "
 	
@@ -39,6 +37,7 @@ main:
 //	addl	$4,	%esp	##
 
 	movl	int,	%eax	#scanned value is in eax
+	movl	%eax,	int_2
 
 	cmpl	$0,	int
 	jnl	positiv
@@ -81,10 +80,15 @@ start:
 	jmp	start	
 #	}
 poststart:
-	cmpl	$31,	%ebx
+	cmpl	$32,	%ebx	#!!!!!!!!!!!!!!!!!!!!!!
 	jnl	premiddle
-	
+
 	pushl	$0
+	cmp	$0,	int_2
+	jnl	zero
+	addl	$4,	%esp
+	pushl	$1	
+	zero:	
 	incl	%ebx
 	
 	jmp	poststart
