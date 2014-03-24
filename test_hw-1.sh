@@ -29,7 +29,7 @@ for dir in ./ ; do
 
 	# Loop over student's tasks.
 	# FIXME Hardcoded sequence of task's numbers.
-	for n in {1..25} ; do
+	for n in {1..7} ; do
 		# Compile task.
 		gcc -m32 task_$n.s -o task 2>/dev/null
 		if [ $? -eq 0 ]; then
