@@ -47,11 +47,11 @@ show:
 	movl 24(%ebp),	%ebx
 
 #	test
-	pushl	%ecx
-	pushl	%ebx
-	pushl	$fmt_my
-	call printf
-	addl	$12, 	%esp
+#	pushl	%ecx
+#	pushl	%ebx
+#	pushl	$fmt_my
+#	call printf
+#	addl	$12, 	%esp
 #
 	movl 20(%ebp),	%ecx
 loop_roll:
