@@ -16,9 +16,9 @@ bin="./task"
 hw="hw-1"
 
 # Loop over student's HW folders.
-for dir in ./ ; do
+#for dir in ./ ; do
 	# Print title.
-	echo -e "${blue}STUDENT: $dir$NC"
+#	echo -e "${blue}STUDENT: $dir$NC"
 	# Safely cd in next student's folder.
 	cd $dir$hw 2>/dev/null
 	if [ $? -eq 1 ]; then
@@ -29,13 +29,14 @@ for dir in ./ ; do
 
 	# Loop over student's tasks.
 	# FIXME Hardcoded sequence of task's numbers.
-	for n in {1..7} ; do
+	for n in {1..25} ; do
 		# Compile task.
 		gcc -m32 task_$n.s -o task 2>/dev/null
 		if [ $? -eq 0 ]; then
 			echo -e "\tTASK $n: ${green}COMPILE OK${NC}"
 		else
 			echo -e "\tTASK $n: ${red}COMPILE FAILED${NC}"
+			continue
 		fi
 		# Run prepared tests for task.
 		# FIXME Hardcoded sequence of test's numbers.
@@ -63,4 +64,4 @@ for dir in ./ ; do
 	done
 	# Return to origin folder.
 	cd ../..
-done
+#done
