@@ -5,14 +5,12 @@ fmt_int:
 	.string	"%d"
 fmt_intn:
 	.string "%d\n"
-fmt_my:
-	.string "[%d - %d]\n"
 fmt_endl:
 	.string "\n"
 	
 	.text
-	.globl	main
-	.globl	show
+.globl	main
+.type	main,	@function
 main:
 	pushl	%ebp		#prolog
 	movl	%esp, 	%ebp	#prolog
@@ -36,23 +34,18 @@ main:
 	movl	$0,	%eax
 	ret 
 
+.globl	show
+.type	show,	@function
 show:
-	pushl	%ebx
-	pushl	%ecx
-	pushl	%edx	
-	pushl	%ebp		#prolog
-	movl	%esp, 	%ebp	#prolog
+	pushl	%ebx		#prolog
+	pushl	%ecx		#
+	pushl	%edx		#
+	pushl	%ebp		#
+	movl	%esp, 	%ebp	#
 	
 	movl 20(%ebp),	%ecx
 	movl 24(%ebp),	%ebx
 
-#	test
-#	pushl	%ecx
-#	pushl	%ebx
-#	pushl	$fmt_my
-#	call printf
-#	addl	$12, 	%esp
-#
 	movl 20(%ebp),	%ecx
 loop_roll:
 	movl	$1,	%edx
@@ -74,8 +67,8 @@ loop_print:
 
 	movl	%ebp,	%esp	#epilog
 	popl	%ebp		#epilog
-	popl	%edx
-	popl	%ecx
-	popl	%ebx
+	popl	%edx		#
+	popl	%ecx		#
+	popl	%ebx		#
 	ret 
 	

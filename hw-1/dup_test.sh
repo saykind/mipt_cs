@@ -1,6 +1,7 @@
 #!/bin/bash
 
-N=13	# Task number 
+N=20 	# from
+M=24	# to 
 
 
 # Coloring definitions.
@@ -12,8 +13,8 @@ NC='\e[0m'
 
 cd ./tests
 for n in {1..5} ; do
-	echo -e "touch task_${blue}$N${NC}-${red}$n${NC}.in"
-	touch task_$N-$n.in
+	echo -e "cp task_${blue}$N${NC}-${red}$n${NC}.in task_${blue}$M${NC}-${red}$n${NC}.in"
+	cp task_$N-$n.in task_$M-$n.in
 	echo -e "touch task_${blue}$N${NC}-${red}$n${NC}.out"
 	touch task_$N-$n.out
 done
