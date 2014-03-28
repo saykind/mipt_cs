@@ -1,9 +1,10 @@
 	.data
 fmt_x:	.string "%x\n"
 fmt_int:.string "%d"
-flags:	.string "CF\tZF\tSF\tOF\n"
+flagstr:.string "CF\tZF\tSF\tOF\n"
 fmt_f:	.string "%d\t%d\t%d\t%d\n"	
 fmt_n:	.string "\n"
+fmt_in:	.string "%c"
 
 	.bss
 cf:	.space 1
@@ -17,36 +18,72 @@ main:
 	pushl	%ebp
 	movl	%esp,	%ebp
 
-	pushl	$flags
+	pushl	$cf
+	pushl	$fmt_in
+	call scanf
+	addl	$8,	%esp
+	movl	cf,	%ebx	
+	
+	pushl	$flagstr
 	call printf
 	addl	$4,	%esp
 	
-	pushfl	
-	call showf
-	pushl	$16
-	call show
-	addl	$8,	%esp
-	pushl	$fmt_n
-	call printf
-	addl	$4,	%esp
-
-#test	
+	cmpw	$0x63,	%bx
+	je	.Czso
+	cmpb	$0x7a,	%bl
+	je	.cZso
+	cmpb	$0x73,	%bl
+	je	.czSo
+	cmpb	$0x6f,	%bl
+	je	.czsO
+	jmp	.czso
+.Czso:
+	movl	$0b11,	%eax	# mov doesn't set flags
+	shrl	%eax		# sets CF
+	pushfl
+	jmp	.break
+.cZso:
+	xorl	%eax,	%eax	# sets ZF
+	pushfl
+	jmp	.break
+.czSo:
+	movl	$-1,	%eax
+	andl	%eax,	%eax	# sets SF
+	pushfl
+	jmp	.break
+.czsO:
+	movl	$-1,	%eax
+	addl	$2,	%eax
+	rcrl	$2,	%eax	# sets OF
+	pushfl
+	jmp	.break
+.czso:
+	movl	$0x10,	%eax
+	addl	$0x10,	%eax
+	pushfl
+	jmp	.break
+.CzSo:
 	movl	$0,	%eax
-	addl	$1, 	%eax
-	shrl	%eax
+	subl	$1,	%eax	# sets CF and SF
 	pushfl
 	call showf
-	pushl	$16
-	call show
-	addl	$8,	%esp
-	pushl	$fmt_n
-	call printf
-	addl	$4,	%esp
-
+	popfl
+.CZso:
+	movl	$0b01,	%eax	# mov doesn't set flags
+	shrl	%eax		# sets CF and ZF
+	pushfl
+	call showf
+	popf
+.break:
+	call showf
+	popfl
+	
 	movl	$0,	%eax	
 	movl	%ebp,	%esp
 	popl	%ebp
 	ret
+
+
 
 
 
@@ -104,42 +141,3 @@ showf:
         popl    %ecx            #
         popl    %ebx            #
         ret
-
-.globl  show
-.type   show,   @function
-show:
-        pushl   %ebx            #prolog
-        pushl   %ecx            #
-        pushl   %edx            #
-        pushl   %ebp            #
-        movl    %esp,   %ebp    #
-
-        movl 20(%ebp),  %ecx
-        movl 24(%ebp),  %ebx
-
-        movl 20(%ebp),  %ecx
-loop_roll:
-        movl    $1,     %edx
-        rorl    $1,     %ebx
-        jc      one
-        movl    $0,     %edx
-        one:
-        pushl   %edx
-        loop loop_roll
-
-        movl 20(%ebp),  %ecx
-loop_print:
-        movl    %ecx,   %ebx
-        pushl $fmt_int
-        call printf
-        addl    $8,     %esp
-        movl    %ebx,   %ecx
-        loop loop_print
-
-        movl    %ebp,   %esp    #epilog
-        popl    %ebp            #epilog
-        popl    %edx            #
-        popl    %ecx            #
-        popl    %ebx            #
-        ret
-
