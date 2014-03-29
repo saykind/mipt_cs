@@ -1,6 +1,6 @@
 #!/bin/bash
 
-N=14	# Task number 
+N=18	# Task number 
 
 
 # Coloring definitions.

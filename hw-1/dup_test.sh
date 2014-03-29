@@ -1,7 +1,7 @@
 #!/bin/bash
 
-N=20 	# from
-M=24	# to 
+N=17 	# from
+M=19	# to 
 
 
 # Coloring definitions.

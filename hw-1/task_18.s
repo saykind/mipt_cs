@@ -81,15 +81,15 @@ print_array:
 	movl 32(%ebp), 	%edi
 	movl 36(%ebp), 	%esi
 	movl	$0,	%ebx	#	ebx = 0; edi = N
-.cycle:				#	for (ebx = 0; ebx < edi; ebx++) {
-	cmpl	%edi,	%ebx	#	
+.cycle:				#	while
+	cmpl	%edi,	%ebx	#	(ebx < edi) {
 	jnl	.out		#	
 	pushl	array(,%ebx,4)	#	
 	pushl	$fmt_int	#	
 	call printf		#	printf("%d ", array+ebx*4);
 	addl	$8,	%esp	#
 				#
-	inc	%ebx		#	
+	inc	%ebx		#	ebx++;
 	jmp	.cycle		#	}
 .out:				
 	

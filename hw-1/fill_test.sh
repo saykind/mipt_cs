@@ -1,6 +1,6 @@
 #!/bin/bash
 
-N=14
+N=19
 # Task number 
 
 
