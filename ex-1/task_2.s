@@ -46,6 +46,7 @@ main:
 	addl	$12,	%esp
 	jmp	.end
 .end:
+	movl	$0,	%eax
 	movl	%ebp,	%esp
 	popl	%ebp
 	ret
