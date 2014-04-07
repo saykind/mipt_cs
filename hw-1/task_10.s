@@ -28,7 +28,14 @@ main:
 	pushl	%ebp
 	movl	%esp, %ebp
 
-	pushl	glob_double_init
+	subl	$4,	%esp
+	movl	$glob_double_init,	%ebx
+	addl	$4,	%ebx
+	movl	(%ebx),	%eax
+	movl	%eax,	(%esp)
+	subl	$4,	%esp
+	movl	glob_double_init,	%eax
+	movl	%eax,	(%esp)
 	pushl	glob_int_init
 	pushl	glob_char_init
 	pushl	$fmt

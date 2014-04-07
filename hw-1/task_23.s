@@ -35,7 +35,14 @@ main:
 	call scanf
 	addl	$0x10,	%esp
 
-	pushl	glob_double_uninit
+	subl	$4,	%esp
+	movl	$glob_double_uninit,	%ebx
+	addl	$4,	%ebx
+	movl	(%ebx),	%eax
+	movl	%eax,	(%esp)
+	subl	$4,	%esp
+	movl	glob_double_uninit,	%eax
+	movl	%eax,	(%esp)
 	pushl	glob_int_uninit
 	pushl	glob_char_uninit
 	pushl	$fmt

@@ -38,11 +38,11 @@ main:
 	pushl	$fmt_d
 	call printf
 	addl 	$8,	%esp
-	movl	$adr,	%eax	# 
-	pushl	%eax
-	pushl	$fmt_d
-	call printf
-	addl 	$8,	%esp
+#	movl	$adr,	%eax	# 
+#	pushl	%eax
+#	pushl	$fmt_d
+#	call printf
+#	addl 	$8,	%esp
 
 	movl	$0,	%eax
 	movl	%ebp,	%esp
