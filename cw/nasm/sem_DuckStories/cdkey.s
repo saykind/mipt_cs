@@ -1,9 +1,12 @@
 	section .data
+extern	scanf
+
 yes: 	db "Accepted!"
 yesl:	equ $-yes
 no: 	db "Wrong key!"
 nol:	equ $-no
 N:	equ 20
+fmt:	db "%d %d", 0
 
 	section .bss
 str: 	resb 20
@@ -20,18 +23,25 @@ main:
 	push	edx
 	mov	ebp,	esp
 
-	mov	edx,	N
-	mov	ecx,	str
-	mov	ebx,	2
-	mov	eax,	3
-	int	0x80
+;	mov	edx,	N
+;	mov	ecx,	str
+;	mov	ebx,	2
+;	mov	eax,	3
+;	int	0x80
 	
-	push	str
-	call 	int_parser		
-	mov	[a],	eax
-	call	int_parser
-	add	esp,	4
-	mov	[b],	eax
+;	push	str
+;	call 	int_parser		
+;	mov	[a],	eax
+;	call	int_parser
+;	add	esp,	4
+;	mov	[b],	eax
+
+	push	b
+	push	a
+	push	fmt
+	call scanf
+	sub	esp,	12
+		
 
 	mov	eax,	[a]
 	mov	ebx,	[b]

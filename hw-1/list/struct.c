@@ -7,8 +7,8 @@ struct person {
 } BigGuy;
 int main (void) {
 	struct person SmallBoy ;
-	strcpy(SmallBoy.surname, "Small");
-	strcpy(SmallBoy.name, "Boy");
+//	strcpy(SmallBoy.surname, "Small");
+//	strcpy(SmallBoy.name, "Boy");
 	SmallBoy.age = 7;
 	return 0;
 }

@@ -1,4 +1,4 @@
-global _start
+global main
 
 ;Объявляем используемые внешние функции из libc
 extern exit
@@ -10,14 +10,10 @@ extern printf
 section .text
  
 ;Функция main:
-_start:
+main:
  
-;Параметры передаются в стеке:
 push dword msg
 call puts
- 
-;По конвенции Си вызывающая процедура должна
-;очищать стек от параметров самостоятельно:
 sub esp, 4
  
 push dword a

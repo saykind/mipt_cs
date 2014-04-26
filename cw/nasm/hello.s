@@ -3,9 +3,12 @@ msg: db "Hello, world", 10
 len: equ $-msg
  
 SECTION .text
-global _start
-_start: mov edx, len
-        mov ecx, msg
+;global _start
+;_start: mov edx, len
+global main
+main:
+ 
+       mov ecx, msg
         mov ebx, 1    ; stdout
         mov eax, 4    ; write(2)
         int 0x80
