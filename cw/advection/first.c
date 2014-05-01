@@ -4,79 +4,68 @@
 
 #define A -1.0
 #define B 1.0
-#define Cx 1
-#define Cy 1
-#define Kx 0.6
-#define Ky 0.4
+#define C 1
+#define K 0.6
 #define X(i,N) (A+1.0*i*(B-A)/N) 
-#define Y(i,N) (A+1.0*i*(B-A)/N) 
 #define O(i,N) (i>0 ? (i): (i+N))
 #define ABS(a) (a>0 ? (a): (-a))
 
-double **advection(int N, int M);
-double  U(double t, double x, double y);
-double 	V(double t, double x, double y);
+double *advection(int N, int M);
+double  U(double t, double x);
+double 	V(double t, double x);
 double  linear(double x1, double y1, double x2, double y2, double x0);
 double *cubic(double dx, double u1, double v1, double u2, double v2);
 double 	Pu(double a, double b, double c, double d, double x);
 double 	Pv(double a, double b, double c, double d, double x);
 FILE   *gpinit(void);
-void 	plot(FILE *gpp, double **u, int N);
-void 	deviation(double **u, int N);
-double	residual(double **u, int N);
+void 	plot(FILE *gpp, double *a, int N);
+void 	deviation(double *u, int N);
+double	residual(double *u, int N);
 
 int main(void) {
-	int N = 100;
+	int N = 500;
 	int M = N/ABS(K);
-	M = 0;
-	double **u = advection(N, M);
-//	deviation(u, N);
-//	double R = residual(u, N);
-//	printf("Max residual = %lg\n", R);
+	double *u = advection(N, M);
+	deviation(u, N);
+	double R = residual(u, N);
+	printf("Max residual = %lg\n", R);
 	free(u);
 	return 0;
 }
 
-double **advection(int N, int M) {
+double *advection(int N, int M) {
+	double *u = (double *) malloc(N*sizeof(double));
+	double *v = (double *) malloc(N*sizeof(double));
+	double dx = (B-A)/N;	double *dd = NULL;
 	int i, j;
-	double **u = (double **) malloc(N*sizeof(double *));
-		for (i = 0; i < N; i++) 
-		{*(u+i) = (double *) malloc(N*sizeof(double));}
-	double **v = (double **) malloc(N*sizeof(double *));
-		for (i = 0; i < N; i++) 
-		{*(v+i) = (double *) malloc(N*sizeof(double));}
-	double dx = (B-A)/N;	
-	double *dd = NULL;
 	FILE *gpp = gpinit();
-	for (i = 0; i < N; i++) {for (j = 0; j < N; j++) {
-		u[i][j] = U(0, X(i,N), Y(j,N));}}
-	for (i = 0; i < N; i++) {for (j = 0; j < N; j++) {
-		v[i][j] = V(0, X(i,N), Y(j,N));}}
+	for (i = 0; i < N; i++) {u[i] = U(0, X(i,N));}
+	for (i = 0; i < N; i++) {v[i] = V(0, X(i,N));}
 	plot(gpp, u, N);
-//	for (j = 0; j < M; j++) {
-//		for (i = N-1; i >= 0; i--) {
+	for (j = 0; j < M; j++) {
+		for (i = N-1; i >= 0; i--) {
 //			dd = cubic(dx, u[O(i,N)-1], v[O(i,N)-1], u[i], v[i]); 
 //			u[i] = dd[0]; v[i] = dd[1];
-//			u[i] = linear(-dx, u[O(i,N)-1], 0, u[i], -K*dx);
-//		}
-//		plot(gpp, u, N);
-//	}
-	sleep(3);
+			u[i] = linear(-dx, u[O(i,N)-1], 0, u[i], -K*dx);
+		}
+		plot(gpp, u, N);
+	}
+	sleep(2);
 	pclose(gpp);
 	if(dd) {free(dd);}
-	for (i = 0; i < N; i++) {free(*(v+i));}	free(v);
+	free(v);
 	return u;
 }
-double U(double t, double x, double y) {
+double U(double t, double x) {
 	if (t == 0) {
-//		return sin(M_PI*x*y);
-		if ((x>=-0.5)&&(x<=0.5)&&(y>=-0.5)&&(y<=0.5)){return 1;} 
+//		return sin(M_PI*x);
+		if ((x>=-0.5)&&(x<=0.5)){return 1;} 
 		else 	{return 0;}
 	}
 }
-double V(double t, double x, double y) {
+double V(double t, double x) {
 	if (t == 0) {
-//		return M_PI*cos(M_PI*x*y);
+//		return M_PI*cos(M_PI*x);
 		if ((x == -0.5) || (x == 0.5)) {return 10;}
 		else {return 0;}
 	}
@@ -109,49 +98,46 @@ FILE *gpinit(void) {
 	fprintf(gpp, "unset border\n");
 //	fprintf(gpp, "unset tics\n");
 	fprintf(gpp, "set style fill solid\n");
-	fprintf(gpp, "set yrange [-1.01:1.01]\n");
+	fprintf(gpp, "set yrange [0:1.01]\n");
 	fprintf(gpp, "set xrange [-1:1]\n");
 	return gpp;
 }
-void plot(FILE *gpp, double **u, int N) {
-	int i, j;
-	fprintf(gpp, "splot '-' w boxes\n");
+void plot(FILE *gpp, double *a, int N) {
+	int i;
+	fprintf(gpp, "plot '-' w boxes\n");
 	for (i = 0; i < N; i++) {
-		for (j = 0; j < N; j++) {
-			fprintf(gpp, "%.6f %.6f %.6f\n", X(i,N), Y(j,N), u[i][j]);
-	
-		}
+		fprintf(gpp, "%.6f %.6f\n", X(i,N), a[i]);
 	}
 	fprintf(gpp,"e\n");
 	fflush(gpp);
 	usleep(200);
 }
-void deviation(double **u, int N) {
-	int i, j;
+void deviation(double *u, int N) {
+	int i;
 	FILE *gpp = gpinit();
 	fprintf(gpp,"set multiplot\n");
 	fprintf(gpp,"plot '-' w line \n");
 	for (i = 0; i < N; i++) {
-		fprintf(gpp, "%.6f %.6f\n", X(i,N), U(0, X(i,N), Y(j, N)));
+		fprintf(gpp, "%.6f %.6f\n", X(i,N), U(0, X(i,N)));
 	}
 	fprintf(gpp,"e\n");
 	fprintf(gpp,"plot '-' w line lt 0 lw 3\n");
 	for (i = 0; i < N; i++) {
-		fprintf(gpp, "%.6f %.6f\n", X(i,N), u[i][j]);
+		fprintf(gpp, "%.6f %.6f\n", X(i,N), u[i]);
 	}
 	fprintf(gpp,"e\n");
 	fflush(gpp);
-	fprintf(gpp,"unset multiplot\n");
 	sleep(10);
+	fprintf(gpp,"unset multiplot\n");
 	pclose(gpp);
 	return;
 }
-double residual(double **u, int N) {
+double residual(double *u, int N) {
 	double *r = (double *) malloc(N*sizeof(double));
 	double max = 0.0;
-	int i, j;
+	int i;
 	for (i = 0; i < N; i++) {
-		r[i] = ABS((U(0, X(i,N), Y(j,N))-u[i][j]));
+		r[i] = ABS((U(0,X(i,N))-u[i]));
 		if (r[i] > max) {max = r[i];}
 	}
 	 FILE *gpp = gpinit();
