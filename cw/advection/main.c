@@ -27,7 +27,7 @@ void 	deviation(double **u, int N);
 double	residual(double **u, int N);
 
 int main(void) {
-	int i, N = 100;
+	int i, N = 50;
 	double **u = advection(N);
 	deviation(u, N);
 	double R = residual(u, N);
@@ -61,7 +61,7 @@ double **advection(int N) {
 //			#pragma omp parallel for
 			for (i = N-1; i >= 0; i--) {
 				dd = cubic(dx, Kx, u[O(i,N)-1][j], v[O(i,N)-1][j], u[i][j], v[i][j]); 
-				u[i][j] = dd[0]; v[i][j] = dd[1];
+				u[i][j] = dd[0]; v[i][j] = dd[1]; free(dd);
 //				u[i][j] = linear(-dx, u[O(i,N)-1][j], 0, u[i][j], -Kx*dx);
 			}
 		}
@@ -75,7 +75,7 @@ double **advection(int N) {
 //			#pragma omp parallel for
 			for (j = N-1; j >= 0; j--) {
 				dd = cubic(dx, Ky, u[i][O(j,N)-1], v[i][O(j,N)-1], u[i][j], v[i][j]); 
-				u[i][j] = dd[0]; v[i][j] = dd[1];
+				u[i][j] = dd[0]; v[i][j] = dd[1]; free(dd);
 //				u[i][j] = linear(-dx, u[i][O(j,N)-1], 0, u[i][j], -Kx*dx);
 			}
 		}
@@ -86,7 +86,6 @@ double **advection(int N) {
 	plot(gpp, u, N);
 	sleep(4);
 	pclose(gpp);
-	if(dd) {free(dd);}
 	for (i = 0; i < N; i++) {free(*(v+i));}	free(v);
 	return u;
 }

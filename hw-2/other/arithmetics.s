@@ -9,17 +9,20 @@ main:
 	pushl	%ebp
 	movl	%esp, %ebp
 	
-	addl	$-4,	%esp
+#	addl	$-4,	%esp		# It's not essential 'cause of push
 	pushl	%esp
+	#movl	%esp,	%esi
+	#subl	$4,	%esp
+	#movl	%esp,	(%esp)
 	pushl	$fmt_d
 	call scanf
 	movl  8(%esp),	%eax	
-	addl	$0xc,	%esp
+	addl	$8,	%esp
 
-	movl	%eax, %edx		# tricky
-	shrl	$31, %edx	 	# algorithm
-	leal	(%edx,%eax), %eax	# dividing
-	sarl	%eax	 		# by 2
+	movl	%eax, %edx
+	shrl	$31, %edx	 
+	leal	(%edx,%eax), %eax
+	sarl	%eax	 
 	
 	pushl	%eax
 	pushl	$fmt_dn
