@@ -1,11 +1,11 @@
+# It compares two strings (divided by space) and prints
+#	0  - if the're completaly equal
+#	%d - number of first different symbol
+# Also it copies them first
 		.data
 fmt_d:	.string "%d"	
-fmt_c:	.string "%c"
-fmt_x:	.string "%x"
 fmt_s:	.string "%s"
 fmt_dn:	.string "%d\n"
-fmt_xn: .string "%x\n"
-fmt_sn:	.string "%s\n"
 int:	.space	4	
 
 		.bss
@@ -45,23 +45,10 @@ main:
 	pushl	$str_b
 	call strise
 	addl	$8,	%esp
-	cmp	$0,	%eax
-	je	.equal
 	pushl	%eax	
-	.equal:
-	pushl	$str_equ
-	call printf
-	addl	$4,	%esp
-	jmp	.afterequal
-
-#	pushl	$str_out
-#	pushl	$fmt_sn
-#	call printf
-#	addl	$8,	%esp
 	pushl	$fmt_dn
 	call printf
 	addl	$8,	%esp
-	
 
 	movl	$0,	%eax
 	movl	%ebp,	%esp
@@ -79,7 +66,6 @@ strise:
 	pushl 	%ebp
 	movl	%esp,	%ebp
 
-	
 	subl	$0x8,	%esp		# -4(%ebp) for length_1
 					# -8(%ebp) for length_2
 	cld
@@ -106,6 +92,58 @@ strise:
 	jge	.skip
 	movl	%ebx,	%ecx
 	.skip:				# ecx = max(length_1,length_2)
+	movl	%ecx,	%ebx	
+
+	inc	%ecx
+	movl  20(%ebp),	%esi
+	movl  24(%ebp),	%edi
+	cld
+	repe cmpsb
+	cmp	$0,	%ecx
+	je	.next
+	notl	%ecx
+	inc	%ecx
+	add	%ebx,	%ecx
+	inc	%ecx
+	.next:
+
+	movl	%ecx,	%eax
+	movl	%ebp,	%esp
+	popl	%ebp
+	popl	%edx
+	popl	%ecx
+	popl	%ebx
+	ret
+
+
+	.type strsim, @function
+strsim:
+	pushl	%ebx
+	pushl	%ecx
+	pushl	%edx
+	pushl 	%ebp
+	movl	%esp,	%ebp
+
+	subl	$0x8,	%esp		# -4(%ebp) for length_1
+					# -8(%ebp) for length_2
+	cld
+	movl  20(%ebp),	%edi
+	xorl	%eax, 	%eax		# s
+	movl	$0xffffffff,	%ecx	# t
+	repne	scasb			# r
+	notl	%ecx			# l
+	decl	%ecx			# e
+	movl	%ecx,	-4(%ebp)	# n
+
+	cld
+	movl  24(%ebp),	%edi
+	xorl	%eax, 	%eax		# s
+	movl	$0xffffffff,	%ecx	# t
+	repne	scasb			# r
+	notl	%ecx			# l
+	decl	%ecx			# e
+	movl	%ecx,	-8(%ebp)	# n
+
 
 	inc	%ecx
 	movl  20(%ebp),	%esi
@@ -122,6 +160,7 @@ strise:
 	ret
 
 
+
 	.type strcop, @function
 strcop:
 	pushl	%ebx
@@ -130,8 +169,8 @@ strcop:
 	pushl 	%ebp
 	movl	%esp,	%ebp
 
-	movl  20(%ebp),	%esi
-	movl  24(%ebp),	%edi
+	movl  24(%ebp),	%esi
+	movl  20(%ebp),	%edi
 	xorl	%ecx,	%ecx
 	
   .loop:

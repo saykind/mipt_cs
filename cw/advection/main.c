@@ -27,7 +27,7 @@ void 	deviation(double **u, int N);
 double	residual(double **u, int N);
 
 int main(void) {
-	int i, N = 50;
+	int i, N = 100;
 	double **u = advection(N);
 	deviation(u, N);
 	double R = residual(u, N);
@@ -56,9 +56,7 @@ double **advection(int N) {
 
 	M = N/Kx;
 	for (t = 0; t < M; t++) {
-//		#pragma omp parallel for
 		for (j = 0; j < N; j++) {
-//			#pragma omp parallel for
 			for (i = N-1; i >= 0; i--) {
 				dd = cubic(dx, Kx, u[O(i,N)-1][j], v[O(i,N)-1][j], u[i][j], v[i][j]); 
 				u[i][j] = dd[0]; v[i][j] = dd[1]; free(dd);

@@ -8,9 +8,9 @@ int main(int argv, char *argc[]) {
 	int N;
 	double *u;
 
-//	if (argv > 1) {sscanf(argc[1],"%d", &N);}
-//	else {N = 100;}
-	if (scanf("%d", &N)) {} else {N = 40;}
+	if (argv > 1) {sscanf(argc[1],"%d", &N);}
+	else {N = 100;}
+//	if (scanf("%d", &N)) {} else {N = 40;}
 	
 	iinit(&I, N);
 	u = advection(I.N, I.M);

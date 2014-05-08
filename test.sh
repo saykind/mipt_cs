@@ -13,7 +13,7 @@ NC='\e[0m'
 # Useful variables.
 origin=$(pwd)
 bin="./task"
-hw="hw-1"
+hw="hw-2"
 
 # Loop over student's HW folders.
 #for dir in ./ ; do
@@ -29,7 +29,7 @@ hw="hw-1"
 
 	# Loop over student's tasks.
 	# FIXME Hardcoded sequence of task's numbers.
-	for n in {1..25} ; do
+	for n in {1..5} ; do
 		# Compile task.
 		gcc -m32 task_$n.s -o task 2>/dev/null
 		if [ $? -eq 0 ]; then
