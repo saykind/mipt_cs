@@ -2,10 +2,13 @@
 	.data
 fmt_in:	.string "%lf"
 fmt_out:.string	"%lg "
-fmt_d:.string "%d"
+fmt_sum:.string "%.10lf\n"
+fmt_d:	.string "%d"
+a:	.double	1.2
+b:	.double 2.1
 	
 	.bss
-array:	.space 80
+array:	.space 400
 i:	.space 4
 N:	.space 4
 
@@ -14,7 +17,7 @@ N:	.space 4
 main:
 	pushl	%ebp
 	movl	%esp, %ebp
-	
+
 	pushl	$N
 	pushl	$fmt_d
 	call scanf
@@ -25,15 +28,17 @@ main:
 	call scan_array
 	addl	$8,	%esp	
 
+#	pushl	$array
+#	pushl	N
+#	call print_array
+#	addl	$8,	%esp
+	
 	pushl	$array
 	pushl	N
-	call print_array
+	call sumof_array
+	pushl	$fmt_sum
+	call printf
 	addl	$8,	%esp
-	
-#	pushl	%eax
-#	pushl	$fmt_out
-#	call printf
-#	addl	$8,	%esp
 		
 	movl	$0, %eax
 	leave
@@ -95,7 +100,7 @@ print_array:
 .cycle:
 	fldl	(%esi,%ebx,8)
 	subl	$8,	%esp
-	fstl	(%esp)
+	fstpl	(%esp)
 	pushl	$fmt_out
 	call printf
 	addl	$12,	%esp
@@ -116,7 +121,7 @@ print_array:
 	
 	.globl 	sumof_array
 	.type 	sumof_array, @function
-minof_array:
+sumof_array:
 	pushl	%ebp
 	pushl	%ebx
 	pushl	%ecx
@@ -127,17 +132,19 @@ minof_array:
 	
 	movl 28(%ebp), 	%edi
 	movl 32(%ebp), 	%esi
-	movl	$0,	%ebx
-	movl	array,	%eax
+	finit
+	fldl	(%esi)
+	movl	$1,	%ebx
 .start:
-	cmpl	%eax,	array(,%ebx,4)	
-	jg	.skip	
-	movl	array(,%ebx,4),	%eax
-  .skip:
+	fldl	(%esi,%ebx,8)	
+	faddp
+	
 	inc	%ebx
 	cmpl	%edi,	%ebx
 	jl	.start
 	
+	fstpl 	28(%ebp)
+
 	movl	%ebp,	%esp
 	popl	%esi
 	popl	%edi

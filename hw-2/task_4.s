@@ -1,14 +1,21 @@
 # White-space means end of line
 	.data
 fmt_d:	.string "%d"
-fmt_c:	.string "%c"
-fmt_s:	.string "%s"
-fmt_dn:	.string "%d\n"
+fmt_f:	.string "%lf"
+fmt_fn:	.string "%.10lf\n"
+fmt_in:	.string "%lf %lf"
 fmt_xn:	.string "%x\n"
 	
+a:	.double	-3.1
+b:	.double 2.0
+c:	.double 1.5
+d:	.double -0.9
+
 	.bss
-str:	.space 100
-c:	.byte 0
+buf:	.space 100
+x:	.space 8
+y:	.space 8
+z:	.space 8
 
 	.text
 	.global main
@@ -16,25 +23,37 @@ c:	.byte 0
 main:
 	pushl	%ebp
 	movl	%esp,	%ebp
-	
-	pushl	%ebp
-	pushl	$fmt_xn
-	call printf
-	addl	$8,	%esp
-	movl	%ebp,	%esp
-	
-	pushl	%esp
-	pushl	$fmt_xn
-	call printf
-#	addl	$8,	%esp
-#	movl	%ebp,	%esp
-	
-	movl	4(%esp),	%eax
-	
-	pushl 	%eax
-	pushl 	$fmt_xn
-	call printf	
 
+	pushl	$y
+	pushl	$x
+	pushl	$fmt_in
+	call scanf
+	addl	$0xc,	%esp
+	
+	finit
+	 fldl	y
+	 fldl	x
+	 fyl2x
+	frndint	
+	fld1
+	fscale
+	 fldl	y
+	 fldl	x
+	 fyl2x
+	frndint
+	 fldl	y
+	 fldl	x
+	 fyl2x
+	fsubp
+	f2xm1
+	fld1
+	faddp
+	fmulp
+	sub	$8,	%esp
+	fstpl	(%esp)
+	pushl	$fmt_fn
+	call printf
+	addl	$12,	%esp
 
 	movl	$0,	%eax
 	movl	%ebp,	%esp
