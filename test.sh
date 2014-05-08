@@ -31,7 +31,7 @@ hw="hw-2"
 	# FIXME Hardcoded sequence of task's numbers.
 	for n in {1..6} ; do
 		# Compile task.
-		gcc -m32 task_$n.s -o task 2>/dev/null
+		gcc -m32 task_$n.? -o task 2>/dev/null
 		if [ $? -eq 0 ]; then
 			echo -e "\tTASK $n: ${green}COMPILE OK${NC}"
 		else
