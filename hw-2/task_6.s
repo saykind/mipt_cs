@@ -16,7 +16,6 @@ of:	.space 1
 .macro OUTF
 	pushfl
 	call showf
-	addl	$4,	%esp
 	popfl
 .endm
 	.globl 	main
