@@ -58,8 +58,8 @@ main:
 	jmp	.break
 .czsO:
 	movl	$-1,	%eax
-	addl	$2,	%eax
-	rcrl	$2,	%eax	# sets OF
+	addl	$3,	%eax
+	rcrl	$1,	%eax	# sets OF
 	OUTF
 	jmp	.break
 .czso:
