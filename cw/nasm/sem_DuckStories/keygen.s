@@ -29,5 +29,5 @@ main:
 	add	esp,	8
 	
 	leave
-
+	mov	eax,	0
 	ret	
