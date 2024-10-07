@@ -1,4 +1,4 @@
-Say Kind
+MIPT CS
 =======
 
 Repository for MIPT classes
